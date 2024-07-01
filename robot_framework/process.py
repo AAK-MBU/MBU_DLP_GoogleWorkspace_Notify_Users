@@ -51,10 +51,6 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
             """)
 
             rows = cursor.fetchall()
-            orchestrator_connection.log_trace(len(rows))
-            if not rows:
-                raise ValueError("No rows found to process.")
-
             for row in rows:
                 to_email = row.email_ad
                 to_name = row.navn
