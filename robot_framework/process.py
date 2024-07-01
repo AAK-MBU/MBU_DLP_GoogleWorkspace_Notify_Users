@@ -37,6 +37,9 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
         subject = oc_args_json['subject']
         body_template = oc_args_json['body']
 
+        orchestrator_connection.log_trace(subject)
+        orchestrator_connection.log_trace(emails_str)
+
         with pyodbc.connect(connection_string) as conn:
             cursor = conn.cursor()
             cursor.execute(f"""
@@ -48,6 +51,7 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
             """)
 
             rows = cursor.fetchall()
+            orchestrator_connection.log_trace(len(rows))
             if not rows:
                 raise ValueError("No rows found to process.")
 
