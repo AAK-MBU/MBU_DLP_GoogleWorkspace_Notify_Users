@@ -82,8 +82,6 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
         print(f"SMTP error: {str(e)}")
     except ValueError as e:
         print(f"Value error: {str(e)}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {str(e)}")
 
 
 if __name__ == "__main__":
