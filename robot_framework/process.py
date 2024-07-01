@@ -1,5 +1,4 @@
 """This module contains the main process of the robot."""
-import os
 import json
 import pyodbc
 
