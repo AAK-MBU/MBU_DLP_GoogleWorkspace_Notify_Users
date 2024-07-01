@@ -37,13 +37,10 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
         subject = oc_args_json['subject']
         body_template = oc_args_json['body']
 
-        orchestrator_connection.log_trace(subject)
-        orchestrator_connection.log_trace(emails_str)
-
         with pyodbc.connect(connection_string) as conn:
             cursor = conn.cursor()
             cursor.execute(f"""
-                SELECT TOP 1 [alertId], [triggerUserEmail], [link], [isNotified], [azident], [navn], [email_ad]
+                SELECT [alertId], [triggerUserEmail], [link], [isNotified], [azident], [navn], [email_ad]
                 FROM [RPA].[rpa].[DLPGoogleAlertsView]
                 WHERE isNotified = 0
                       AND triggerType = 'CPR-Number'
@@ -57,9 +54,6 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
                 link_to_file = row.link
 
                 body = body_template.format(to_name=to_name, link_to_file=link_to_file)
-
-                orchestrator_connection.log_trace(to_email)
-                orchestrator_connection.log_trace(email_sender)
 
                 smtp_util.send_email(
                     receiver=to_email,
