@@ -84,8 +84,6 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
         print(f"JSON decode error: {str(e)}")
     except KeyError as e:
         print(f"Missing key in process arguments: {str(e)}")
-    except smtp_util.SMTPException as e:
-        print(f"SMTP error: {str(e)}")
     except ValueError as e:
         print(f"Value error: {str(e)}")
 
