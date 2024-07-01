@@ -32,25 +32,24 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
     try:
         connection_string = orchestrator_connection.get_constant('DbConnectionString').value
         email_sender = orchestrator_connection.get_constant("E-mail").value
+        oc_args_json = json.loads(orchestrator_connection.process_arguments)
+        emails_str = ", ".join(f"'{email}'" for email in oc_args_json['emails'])
+        subject = oc_args_json['subject']
+        body_template = oc_args_json['body']
 
         with pyodbc.connect(connection_string) as conn:
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute(f"""
                 SELECT TOP 1 [alertId], [triggerUserEmail], [link], [isNotified], [azident], [navn], [email_ad]
                 FROM [RPA].[rpa].[DLPGoogleAlertsView]
                 WHERE isNotified = 0
                       AND triggerType = 'CPR-Number'
-                      AND alertId = '95EBECFD-AE06-4906-89B4-F9DF0EAAE128'
+                      AND triggerUserEmail IN ({emails_str})
             """)
 
             rows = cursor.fetchall()
             if not rows:
-                print("No rows found to process.")
-                return
-
-            oc_args_json = json.loads(orchestrator_connection.process_arguments)
-            subject = oc_args_json['subject']
-            body_template = oc_args_json['body']
+                raise ValueError("No rows found to process.")
 
             for row in rows:
                 to_email = row.email_ad
