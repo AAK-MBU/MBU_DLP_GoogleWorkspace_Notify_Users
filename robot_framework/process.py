@@ -58,6 +58,9 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
 
                 body = body_template.format(to_name=to_name, link_to_file=link_to_file)
 
+                orchestrator_connection.log_trace(to_email)
+                orchestrator_connection.log_trace(email_sender)
+
                 smtp_util.send_email(
                     receiver=to_email,
                     sender=email_sender,
