@@ -44,6 +44,7 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
                 FROM [RPA].[rpa].[DLPGoogleAlertsView]
                 WHERE isNotified = 0
                       AND triggerType = 'CPR-Number'
+                      AND email_ad IS NOT NULL
                       AND triggerUserEmail IN ({emails_str})
             """)
 
