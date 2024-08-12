@@ -38,7 +38,7 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
 
         with pyodbc.connect(connection_string) as conn:
             cursor = conn.cursor()
-            cursor.execute(f"""
+            cursor.execute("""
                 SELECT [alertId], [triggerUserEmail], [link], [isNotified], [azident], [navn], [email_ad]
                 FROM [RPA].[rpa].[DLPGoogleAlertsView]
                 WHERE isNotified = 0
