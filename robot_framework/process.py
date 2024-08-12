@@ -33,19 +33,17 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
         connection_string = orchestrator_connection.get_constant('DbConnectionString').value
         email_sender = orchestrator_connection.get_constant("E-mail").value
         oc_args_json = json.loads(orchestrator_connection.process_arguments)
-        emails_str = ", ".join(f"'{email}'" for email in oc_args_json['emails'])
         subject = oc_args_json['subject']
         body_template = oc_args_json['body']
 
         with pyodbc.connect(connection_string) as conn:
             cursor = conn.cursor()
-            cursor.execute(f"""
+            cursor.execute("""
                 SELECT [alertId], [triggerUserEmail], [link], [isNotified], [azident], [navn], [email_ad]
                 FROM [RPA].[rpa].[DLPGoogleAlertsView]
                 WHERE isNotified = 0
                       AND triggerType = 'CPR-Number'
                       AND email_ad IS NOT NULL
-                      AND triggerUserEmail IN ({emails_str})
             """)
 
             rows = cursor.fetchall()
