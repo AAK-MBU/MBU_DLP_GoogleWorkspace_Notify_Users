@@ -31,7 +31,7 @@ def fetch_data_and_send_emails(orchestrator_connection: OrchestratorConnection):
     """
     try:
         connection_string = orchestrator_connection.get_constant('DbConnectionString').value
-        email_sender = orchestrator_connection.get_constant("E-mail").value
+        email_sender = orchestrator_connection.get_constant("e-mail_noreply").value
         oc_args_json = json.loads(orchestrator_connection.process_arguments)
         subject = oc_args_json['subject']
         body_template = oc_args_json['body']
